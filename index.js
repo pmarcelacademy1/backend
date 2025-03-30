@@ -25,9 +25,15 @@ dotenv.config();
 
 const app = express();
 
+// app.use(cors({
+//   origin: process.env.CLIENT_URL,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+// }));
 app.use(cors({
-  origin: process.env.CLIENT_URL,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+  origin: process.env.CLIENT_URL || 'https://frontend-gn5g.onrender.com', // Fallback for safety
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // Include headers your app uses
+  credentials: true // If you’re using cookies or auth headers
 }));
 app.use(clerkMiddleware());
 app.use("/webhooks", webhookRouter);
@@ -43,6 +49,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+// app.options('*', cors()); // Handle preflight for all routes
 // Public routes
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
