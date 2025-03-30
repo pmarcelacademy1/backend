@@ -25,15 +25,9 @@ dotenv.config();
 
 const app = express();
 
-// app.use(cors({
-//   origin: process.env.CLIENT_URL,
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
-// }));
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://frontend-gn5g.onrender.com', // Fallback for safety
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'], // Include headers your app uses
-  credentials: true // If you’re using cookies or auth headers
+  origin: process.env.CLIENT_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
 }));
 app.use(clerkMiddleware());
 app.use("/webhooks", webhookRouter);
@@ -49,7 +43,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-// app.options('*', cors()); // Handle preflight for all routes
 // Public routes
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
@@ -66,8 +59,6 @@ app.use('/api/talents', talentRouter);
 app.use("/", contactRoutes);
 app.use("/", newsletterRouter);
 
-app.use('/api/', courseRouter);
-
 // Protected admin routes
 app.use('/api/courses', courseRouter); // We'll protect specific routes in the router
 app.use('/api/categories', categoriesRouter); // We'll protect specific routes in the router
@@ -81,9 +72,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(5000, () => {
   connectDB();
-  console.log(`Server is running on port ${PORT}`);
+  console.log("server is running");
 });
-
