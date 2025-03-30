@@ -66,6 +66,8 @@ app.use('/api/talents', talentRouter);
 app.use("/", contactRoutes);
 app.use("/", newsletterRouter);
 
+app.use('/api/', courseRouter);
+
 // Protected admin routes
 app.use('/api/courses', courseRouter); // We'll protect specific routes in the router
 app.use('/api/categories', categoriesRouter); // We'll protect specific routes in the router
