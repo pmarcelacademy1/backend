@@ -4,15 +4,31 @@ const router = express.Router();
 import Course from "../models/Course.js";
 
 
-// Public route - anyone can view courses
 router.get('/', async (req, res) => {
   try {
-    const courses = await Course.find();
+    const { ids } = req.query;
+    let courses;
+    if (ids) {
+      const idArray = ids.split(',');
+      courses = await Course.find({ _id: { $in: idArray } });
+    } else {
+      courses = await Course.find();
+    }
     res.json(courses);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Error fetching courses' });
   }
 });
+
+// Public route - anyone can view courses
+// router.get('/', async (req, res) => {
+//   try {
+//     const courses = await Course.find();
+//     res.json(courses);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
 
 // Public route - anyone can view specific course
 router.get('/:id', async (req, res) => {
